@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Home Credit Lakehouse Architecture - Archify Explorer</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    :root {
+      --bg: #0b0f19;
+      --card-bg: #111827;
+      --card-border: #1f2937;
+      --text-main: #f3f4f6;
+      --text-muted: #9ca3af;
+      --accent-blue: #38bdf8;
+      --accent-emerald: #34d399;
+      --accent-amber: #fbbf24;
+      --accent-purple: #c084fc;
+      --accent-rose: #f43f5e;
+    }
+    body.light-mode {
+      --bg: #f8fafc;
+      --card-bg: #ffffff;
+      --card-border: #e2e8f0;
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+      --accent-blue: #0284c7;
+      --accent-emerald: #059669;
+      --accent-amber: #d97706;
+      --accent-purple: #7c3aed;
+      --accent-rose: #e11d48;
+    }
+    body {
+      background-color: var(--bg);
+      color: var(--text-main);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+    .card {
+      background-color: var(--card-bg);
+      border: 1px solid var(--card-border);
+    }
+    .stage-pill {
+      transition: all 0.2s ease;
+      cursor: pointer;
+    }
+    .stage-pill:hover, .stage-pill.active {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px -4px rgba(0,0,0,0.3);
+    }
+    .node-box {
+      border: 1px solid var(--card-border);
+      background: var(--card-bg);
+      transition: all 0.2s ease;
+    }
+    .node-box:hover {
+      border-color: var(--accent-blue);
+    }
+  </style>
+</head>
+<body class="p-6 md:p-10 transition-colors duration-200">
+
+  <!-- Header & Toolbar -->
+  <header class="max-w-7xl mx-auto flex flex-col md:flex-row md:items-center justify-between pb-8 border-b border-[var(--card-border)] mb-8 gap-4">
+    <div>
+      <div class="flex items-center gap-3">
+        <span class="px-2.5 py-1 text-xs font-semibold rounded-md bg-blue-500/10 text-[var(--accent-blue)] border border-blue-500/20">Archify Explorer</span>
+        <span class="text-xs text-[var(--text-muted)]">Home Credit Default Risk • Data Engineering</span>
+      </div>
+      <h1 class="text-2xl md:text-3xl font-bold mt-2">End-to-End Lakehouse Architecture & Dataflow</h1>
+      <p class="text-sm text-[var(--text-muted)] mt-1">Interactive blueprint of the 6-stage medallion pipeline, failure boundaries, and code components.</p>
+    </div>
+    <div class="flex items-center gap-3">
+      <button onclick="toggleTheme()" class="px-3 py-1.5 text-xs font-medium rounded-lg card hover:border-[var(--accent-blue)] flex items-center gap-2">
+        <span id="theme-icon">☀️</span> <span id="theme-text">Light Mode</span>
+      </button>
+      <a href="https://github.com/tt-a1i/archify" target="_blank" class="px-3 py-1.5 text-xs font-medium rounded-lg bg-blue-600/20 text-[var(--accent-blue)] border border-blue-500/30 hover:bg-blue-600/30">
+        Archify Spec v3.2
+      </a>
+    </div>
+  </header>
+
+  <!-- Navigation View Switcher -->
+  <div class="max-w-7xl mx-auto mb-8 flex flex-wrap gap-2">
+    <button onclick="switchView('pipeline')" id="tab-pipeline" class="px-4 py-2 text-sm font-semibold rounded-lg bg-blue-600 text-white shadow-sm">
+      1. Pipeline Architecture (6 Stages)
+    </button>
+    <button onclick="switchView('dataflow')" id="tab-dataflow" class="px-4 py-2 text-sm font-semibold rounded-lg card text-[var(--text-muted)] hover:text-[var(--text-main)]">
+      2. Medallion Dataflow (7 Tables to 152 Features)
+    </button>
+    <button onclick="switchView('cloud')" id="tab-cloud" class="px-4 py-2 text-sm font-semibold rounded-lg card text-[var(--text-muted)] hover:text-[var(--text-main)]">
+      3. Local vs. Production Cloud Mapping
+    </button>
+  </div>
+
+  <!-- VIEW 1: PIPELINE STAGES -->
+  <main id="view-pipeline" class="max-w-7xl mx-auto space-y-8">
+    <div class="grid grid-cols-1 md:grid-cols-6 gap-3">
+      <!-- Stage 1 -->
+      <div onclick="selectStage(1)" id="pill-1" class="stage-pill active card p-4 rounded-xl border-l-4 border-l-blue-500">
+        <span class="text-xs font-semibold text-blue-400">STAGE 1</span>
+        <h3 class="text-sm font-bold mt-1">Landing Upload</h3>
+        <p class="text-xs text-[var(--text-muted)] mt-1">Azurite Block Blobs</p>
+        <span class="inline-block mt-3 px-2 py-0.5 text-[11px] rounded bg-blue-500/10 text-blue-400">0.18s</span>
+      </div>
+
+      <!-- Stage 2 -->
+      <div onclick="selectStage(2)" id="pill-2" class="stage-pill card p-4 rounded-xl border-l-4 border-l-amber-500">
+        <span class="text-xs font-semibold text-amber-400">STAGE 2</span>
+        <h3 class="text-sm font-bold mt-1">Bronze Ingestion</h3>
+        <p class="text-xs text-[var(--text-muted)] mt-1">Append-Only Delta</p>
+        <span class="inline-block mt-3 px-2 py-0.5 text-[11px] rounded bg-amber-500/10 text-amber-400">29.72s</span>
+      </div>
+
+      <!-- Stage 3 -->
+      <div onclick="selectStage(3)" id="pill-3" class="stage-pill card p-4 rounded-xl border-l-4 border-l-cyan-500">
+        <span class="text-xs font-semibold text-cyan-400">STAGE 3</span>
+        <h3 class="text-sm font-bold mt-1">Silver Refinery</h3>
+        <p class="text-xs text-[var(--text-muted)] mt-1">Conformed MERGE</p>
+        <span class="inline-block mt-3 px-2 py-0.5 text-[11px] rounded bg-cyan-500/10 text-cyan-400">450.79s</span>
+      </div>
+
+      <!-- Stage 4 -->
+      <div onclick="selectStage(4)" id="pill-4" class="stage-pill card p-4 rounded-xl border-l-4 border-l-emerald-500">
+        <span class="text-xs font-semibold text-emerald-400">STAGE 4</span>
+        <h3 class="text-sm font-bold mt-1">Gold Mart</h3>
+        <p class="text-xs text-[var(--text-muted)] mt-1">152 Features</p>
+        <span class="inline-block mt-3 px-2 py-0.5 text-[11px] rounded bg-emerald-500/10 text-emerald-400">55.40s</span>
+      </div>
+
+      <!-- Stage 5 -->
+      <div onclick="selectStage(5)" id="pill-5" class="stage-pill card p-4 rounded-xl border-l-4 border-l-rose-500">
+        <span class="text-xs font-semibold text-rose-400">STAGE 5</span>
+        <h3 class="text-sm font-bold mt-1">Circuit Breaker</h3>
+        <p class="text-xs text-[var(--text-muted)] mt-1">15 Quality Gates</p>
+        <span class="inline-block mt-3 px-2 py-0.5 text-[11px] rounded bg-rose-500/10 text-rose-400">19.83s</span>
+      </div>
+
+      <!-- Stage 6 -->
+      <div onclick="selectStage(6)" id="pill-6" class="stage-pill card p-4 rounded-xl border-l-4 border-l-purple-500">
+        <span class="text-xs font-semibold text-purple-400">STAGE 6</span>
+        <h3 class="text-sm font-bold mt-1">Feature Store</h3>
+        <p class="text-xs text-[var(--text-muted)] mt-1">Feast & Redis Cache</p>
+        <span class="inline-block mt-3 px-2 py-0.5 text-[11px] rounded bg-purple-500/10 text-purple-400">2.42s</span>
+      </div>
+    </div>
+
+    <!-- Stage Detail Inspector -->
+    <div id="stage-detail-panel" class="card rounded-2xl p-6 md:p-8">
+      <!-- Dynamic Content Rendered via JS -->
+    </div>
+  </main>
+
+  <!-- VIEW 2: MEDALLION DATAFLOW -->
+  <main id="view-dataflow" class="max-w-7xl mx-auto space-y-8 hidden">
+    <div class="card rounded-2xl p-6 md:p-8">
+      <h2 class="text-xl font-bold mb-2">Relational Data Lineage: From 7 Source Tables to Gold Mart</h2>
+      <p class="text-sm text-[var(--text-muted)] mb-6">How raw transactional histories are conformed, resolved, and aggregated into a single customer feature row.</p>
+
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <!-- Bronze Column -->
+        <div class="space-y-4">
+          <div class="flex items-center justify-between pb-2 border-b border-[var(--card-border)]">
+            <span class="font-bold text-amber-400 text-sm">BRONZE LAYER (7 Tables)</span>
+            <span class="text-xs text-[var(--text-muted)]">58.5M Raw Records</span>
+          </div>
+          <div class="node-box p-3 rounded-lg text-xs space-y-1">
+            <div class="font-semibold text-[var(--text-main)]">application_train / test</div>
+            <div class="text-[var(--text-muted)]">356k rows • Core demographic & loan requests</div>
+          </div>
+          <div class="node-box p-3 rounded-lg text-xs space-y-1">
+            <div class="font-semibold text-[var(--text-main)]">bureau</div>
+            <div class="text-[var(--text-muted)]">1.7M rows • External credit history at other banks</div>
+          </div>
+          <div class="node-box p-3 rounded-lg text-xs space-y-1 border-l-2 border-l-amber-500">
+            <div class="font-semibold text-[var(--text-main)]">bureau_balance</div>
+            <div class="text-[var(--text-muted)]">27.2M rows • Monthly debt status codes</div>
+          </div>
+          <div class="node-box p-3 rounded-lg text-xs space-y-1">
+            <div class="font-semibold text-[var(--text-main)]">previous_application</div>
+            <div class="text-[var(--text-muted)]">1.6M rows • Past loan proposals at Home Credit</div>
+          </div>
+          <div class="node-box p-3 rounded-lg text-xs space-y-1 border-l-2 border-l-amber-500">
+            <div class="font-semibold text-[var(--text-main)]">installments_payments</div>
+            <div class="text-[var(--text-muted)]">13.6M rows • Repayment schedule & late fees</div>
+          </div>
+          <div class="node-box p-3 rounded-lg text-xs space-y-1">
+            <div class="font-semibold text-[var(--text-main)]">POS_CASH_balance</div>
+            <div class="text-[var(--text-muted)]">10.0M rows • Monthly point-of-sale snapshots</div>
+          </div>
+          <div class="node-box p-3 rounded-lg text-xs space-y-1">
+            <div class="font-semibold text-[var(--text-main)]">credit_card_balance</div>
+            <div class="text-[var(--text-muted)]">3.8M rows • Monthly credit card balances</div>
+          </div>
+        </div>
+
+        <!-- Silver Transformations -->
+        <div class="space-y-4">
+          <div class="flex items-center justify-between pb-2 border-b border-[var(--card-border)]">
+            <span class="font-bold text-cyan-400 text-sm">SILVER CONFORMED REFINERY</span>
+            <span class="text-xs text-[var(--text-muted)]">PySpark + Delta MERGE</span>
+          </div>
+          <div class="card p-4 rounded-xl text-xs space-y-3">
+            <h4 class="font-bold text-cyan-400">1. Sentinel Remediation</h4>
+            <p class="text-[var(--text-muted)]">Home Credit stores "missing / never ended" as <code class="text-rose-400 font-mono">365243.0</code> (1,000 years). Replaced with NULL across all employment and drawing days.</p>
+          </div>
+          <div class="card p-4 rounded-xl text-xs space-y-3">
+            <h4 class="font-bold text-cyan-400">2. 27M-Row Entity Resolution</h4>
+            <p class="text-[var(--text-muted)]"><code class="font-mono">bureau_balance</code> lacks client IDs. Silver joins it against <code class="font-mono">bureau</code> to attach <code class="font-mono text-cyan-400">SK_ID_CURR</code> for fast data skipping.</p>
+          </div>
+          <div class="card p-4 rounded-xl text-xs space-y-3">
+            <h4 class="font-bold text-cyan-400">3. Deterministic Surrogate Keys</h4>
+            <p class="text-[var(--text-muted)]">Borrowers can pay installments in partial splits. Generated <code class="font-mono text-cyan-400">INSTALLMENT_ID</code> via SHA-256 hash across all payment grain coordinates.</p>
+          </div>
+          <div class="card p-4 rounded-xl text-xs space-y-3">
+            <h4 class="font-bold text-cyan-400">4. Physical Z-Ordering</h4>
+            <p class="text-[var(--text-muted)]">Ran <code class="font-mono">OPTIMIZE ZORDER BY (SK_ID_CURR)</code> on every table to minimize I/O scan costs.</p>
+          </div>
+        </div>
+
+        <!-- Gold Mart -->
+        <div class="space-y-4">
+          <div class="flex items-center justify-between pb-2 border-b border-[var(--card-border)]">
+            <span class="font-bold text-emerald-400 text-sm">GOLD FEATURE MART</span>
+            <span class="text-xs text-[var(--text-muted)]">307,511 rows × 152 cols</span>
+          </div>
+          <div class="card p-4 rounded-xl text-xs space-y-2 border-l-4 border-l-emerald-500">
+            <div class="font-bold text-[var(--text-main)]">Demographics & Solvency</div>
+            <p class="text-[var(--text-muted)]">Debt-to-income, annuity ratios, goods price leverage, age in years.</p>
+          </div>
+          <div class="card p-4 rounded-xl text-xs space-y-2 border-l-4 border-l-emerald-500">
+            <div class="font-bold text-[var(--text-main)]">Bureau Aggregations</div>
+            <p class="text-[var(--text-muted)]">Active vs closed loan counts, max overdue debt, credit prolongations, DPD flags.</p>
+          </div>
+          <div class="card p-4 rounded-xl text-xs space-y-2 border-l-4 border-l-emerald-500">
+            <div class="font-bold text-[var(--text-main)]">Previous Applications</div>
+            <p class="text-[var(--text-muted)]">Approval rate, refusal rate, average down-payment percent, credit-to-annuity.</p>
+          </div>
+          <div class="card p-4 rounded-xl text-xs space-y-2 border-l-4 border-l-emerald-500">
+            <div class="font-bold text-[var(--text-main)]">Installments Delinquency</div>
+            <p class="text-[var(--text-muted)]">Fraction of payments made late, max days late, cumulative underpayment dollars.</p>
+          </div>
+          <div class="card p-4 rounded-xl text-xs space-y-2 border-l-4 border-l-emerald-500">
+            <div class="font-bold text-[var(--text-main)]">Credit Card & POS Behavior</div>
+            <p class="text-[var(--text-muted)]">Max revolving balance, drawing-to-limit ratio, POS DPD delinquency rate.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- VIEW 3: CLOUD MAPPING -->
+  <main id="view-cloud" class="max-w-7xl mx-auto space-y-8 hidden">
+    <div class="card rounded-2xl p-6 md:p-8">
+      <h2 class="text-xl font-bold mb-2">Local Development vs. Azure Databricks Production Cloud</h2>
+      <p class="text-sm text-[var(--text-muted)] mb-6">Every component in this repository uses enterprise APIs that swap seamlessly into Azure without rewriting business code.</p>
+
+      <div class="overflow-x-auto">
+        <table class="w-full text-left text-xs">
+          <thead>
+            <tr class="border-b border-[var(--card-border)] text-[var(--text-muted)]">
+              <th class="py-3 px-4">Lakehouse Layer</th>
+              <th class="py-3 px-4">Local Container / Tool</th>
+              <th class="py-3 px-4">Production Azure Service</th>
+              <th class="py-3 px-4">Production Benefit in Cloud</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-[var(--card-border)]">
+            <tr>
+              <td class="py-3 px-4 font-semibold text-blue-400">Landing Storage</td>
+              <td class="py-3 px-4 font-mono">Azurite Docker (Blob port 10000)</td>
+              <td class="py-3 px-4 font-semibold">Azure Data Lake Storage Gen2 (ADLS)</td>
+              <td class="py-3 px-4 text-[var(--text-muted)]">Hierarchical namespace, petabyte scale, RBAC access control.</td>
+            </tr>
+            <tr>
+              <td class="py-3 px-4 font-semibold text-amber-400">Bronze & Silver Engine</td>
+              <td class="py-3 px-4 font-mono">PySpark (Single node local JVM)</td>
+              <td class="py-3 px-4 font-semibold">Azure Databricks Multi-Node Cluster</td>
+              <td class="py-3 px-4 text-[var(--text-muted)]">Auto-scaling worker nodes, Photon vectorized C++ engine, GPU support.</td>
+            </tr>
+            <tr>
+              <td class="py-3 px-4 font-semibold text-cyan-400">Storage Format</td>
+              <td class="py-3 px-4 font-mono">Delta Lake 3.2 on local disk</td>
+              <td class="py-3 px-4 font-semibold">Databricks Unity Catalog Delta Tables</td>
+              <td class="py-3 px-4 text-[var(--text-muted)]">Centralized governance, audit lineage, Liquid Clustering automatic optimization.</td>
+            </tr>
+            <tr>
+              <td class="py-3 px-4 font-semibold text-emerald-400">Feature Transformations</td>
+              <td class="py-3 px-4 font-mono">dbt-databricks + PySpark engine</td>
+              <td class="py-3 px-4 font-semibold">dbt Cloud + Databricks SQL Serverless</td>
+              <td class="py-3 px-4 text-[var(--text-muted)]">Instant cluster startup, automatic schema documentation, PR CI runs.</td>
+            </tr>
+            <tr>
+              <td class="py-3 px-4 font-semibold text-rose-400">Data Quality Gates</td>
+              <td class="py-3 px-4 font-mono">circuit_breaker.py (Spark Pytest)</td>
+              <td class="py-3 px-4 font-semibold">Databricks Lakehouse Monitoring & DLT Expectations</td>
+              <td class="py-3 px-4 text-[var(--text-muted)]">Automated data drift alerts, PagerDuty integration, quarantine tables.</td>
+            </tr>
+            <tr>
+              <td class="py-3 px-4 font-semibold text-purple-400">Online Feature Store</td>
+              <td class="py-3 px-4 font-mono">Redis 7.2 Docker (Port 6379)</td>
+              <td class="py-3 px-4 font-semibold">Azure Cache for Redis (Enterprise Clustered)</td>
+              <td class="py-3 px-4 text-[var(--text-muted)]">99.999% SLA, multi-region replication, sub-millisecond scoring API latency.</td>
+            </tr>
+            <tr>
+              <td class="py-3 px-4 font-semibold text-indigo-400">Pipeline Orchestrator</td>
+              <td class="py-3 px-4 font-mono">orchestrator.py CLI</td>
+              <td class="py-3 px-4 font-semibold">Databricks Asset Bundles (Workflows)</td>
+              <td class="py-3 px-4 text-[var(--text-muted)]">Trigger on file arrival, auto-retries, Git integration via databricks.yml.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    const stages = {
+      1: {
+        title: "Stage 1: Azure Landing Upload & SHA-256 Fingerprinting",
+        badge: "azure_uploader.py • 0.18s benchmark",
+        badgeColor: "text-blue-400 bg-blue-500/10",
+        desc: "Raw CSV batch files from branch banking applications arrive in batch directories. The uploader splits each file into 4 MB chunks and streams them into Azurite Block Blobs with a cryptographic fingerprint.",
+        points: [
+          "<strong>Idempotency Guarantee:</strong> Before uploading, the client requests the blob HEAD metadata. If the SHA-256 matches, it skips uploading, saving bandwidth.",
+          "<strong>Atomic Commit:</strong> All 4 MB blocks are staged independently. Azure only creates the visible blob when commit_block_list is executed at the end.",
+          "<strong>Manifest Generation:</strong> Generates a signed _SUCCESS.json file containing individual file byte counts and hashes."
+        ],
+        codeSnippet: `result = upload_single_file_chunked(csv_file, blob_client)
+# Verified skip if SHA-256 matches:
+# [SKIPPED] application_train.csv already exists and verified intact (SHA: 579060d2bcdd...)`
+      },
+      2: {
+        title: "Stage 2: Bronze Delta Ingestion with ACID Ledger",
+        badge: "bronze_loader.py • 29.72s benchmark",
+        badgeColor: "text-amber-400 bg-amber-500/10",
+        desc: "Consumes verified landing files and writes them into raw append-only Delta Lake tables while recording every batch inside an ACID transaction ledger.",
+        points: [
+          "<strong>Ingestion Ledger:</strong> Queries data/lakehouse/_meta/ingestion_ledger. If a batch was already loaded, it halts redundant writes.",
+          "<strong>Audit Provenance:</strong> Injects _meta_batch_id, _meta_source_file, and _meta_ingested_at into every incoming record.",
+          "<strong>Preservation of Raw Truth:</strong> Bronze preserves untyped strings and missing rows exactly as received, guaranteeing historical auditability."
+        ],
+        codeSnippet: `ledger_df.write.format("delta").mode("append").save(ledger_path)
+df_with_meta.write.format("delta").mode("append").save(bronze_table_path)`
+      },
+      3: {
+        title: "Stage 3: Silver Conformed Refinery & MERGE INTO",
+        badge: "silver_processor.py • 450.79s benchmark",
+        badgeColor: "text-cyan-400 bg-cyan-500/10",
+        desc: "Conforms messy raw data into trusted, typed analytical entities. Fixes banking sentinels, links orphan tables, and deduplicates records idempotently.",
+        points: [
+          "<strong>Sentinel Remediation:</strong> Cleans 365243.0 (1,000 year placeholder) into clean NULLs in DAYS_EMPLOYED and loan durations.",
+          "<strong>Entity Resolution Join:</strong> Bureau Balance (27.2M records) is joined with Bureau to attach SK_ID_CURR.",
+          "<strong>Idempotent MERGE:</strong> Deduplicates source on primary keys, then executes Delta MERGE INTO target USING source ON target.PK = source.PK.",
+          "<strong>Physical Layout:</strong> Runs OPTIMIZE ZORDER BY (SK_ID_CURR) for fast file skipping during downstream joins."
+        ],
+        codeSnippet: `target_delta.alias("target")
+  .merge(source_deduped.alias("source"), merge_condition)
+  .whenMatchedUpdateAll(condition="source._ingested_at >= target._ingested_at")
+  .whenNotMatchedInsertAll().execute()`
+      },
+      4: {
+        title: "Stage 4: Gold Feature Mart Materialization",
+        badge: "gold_materializer.py • 55.40s benchmark",
+        badgeColor: "text-emerald-400 bg-emerald-500/10",
+        desc: "Executes the 152-column feature engineering DAG inspired by Kaggle 1st place and open-solution benchmarks. Combines 7 tables into a single customer feature table.",
+        points: [
+          "<strong>Comprehensive Coverage:</strong> 152 features across 5 financial domains (bureau leverage, approval ratios, late payment penalties, credit utilization).",
+          "<strong>Point-in-Time Safe:</strong> Historical features look only backwards from the loan application snapshot date.",
+          "<strong>Materialization:</strong> Generates 307,511 rows × 152 columns in data/lakehouse/gold/customer_features with overwriteSchema support."
+        ],
+        codeSnippet: `gold_features_df.write.format("delta")
+  .option("overwriteSchema", "true")
+  .mode("overwrite").save(gold_path)`
+      },
+      5: {
+        title: "Stage 5: Automated Quality Circuit Breaker",
+        badge: "circuit_breaker.py • 19.83s benchmark",
+        badgeColor: "text-rose-400 bg-rose-500/10",
+        desc: "Automated quality gatekeeper that validates banking invariants before data can ever be served to ML models or APIs.",
+        points: [
+          "<strong>15 Invariant Checks:</strong> PK uniqueness (SK_ID_CURR), zero sentinel leakage, target domain validity, financial bounds, EXT_SOURCE bounds.",
+          "<strong>Circuit Breaker Behavior:</strong> If any critical check fails, raises CircuitBreakerError and halts pipeline execution.",
+          "<strong>Audit Artifacts:</strong> Saves timestamped JSON reports to data/lakehouse/_meta/quality_reports/ with pass/fail counts."
+        ],
+        codeSnippet: `report = run_circuit_breaker(lakehouse_root)
+# Verified output:
+# === Quality Audit Results: 15/15 checks passed. (Critical Failures: 0, Warnings: 0) ===`
+      },
+      6: {
+        title: "Stage 6: Dual Feature Store Sync (Feast + Redis)",
+        badge: "feast_manager.py • 2.42s benchmark",
+        badgeColor: "text-purple-400 bg-purple-500/10",
+        desc: "Connects data engineering to machine learning. Provides point-in-time historical joins for training and sub-millisecond Redis lookups for real-time scoring.",
+        points: [
+          "<strong>Zero Training-Serving Skew:</strong> Both offline models and online APIs read from the exact same feature definitions.",
+          "<strong>Offline Retrieval:</strong> get_historical_features performs as-of temporal joins, guaranteeing zero future data leakage.",
+          "<strong>Sub-Millisecond Serving:</strong> Slices customer feature vectors into Redis; online retrieval benchmark averaged 0.83 ms."
+        ],
+        codeSnippet: `feast_mgr = HomeCreditFeatureStoreManager()
+feast_mgr.sync_to_redis(batch_size=5000)
+# Verified benchmark:
+# === Synced 5,000 customers to Redis in 1.44 seconds (0.83 ms average retrieval) ===`
+      }
+    };
+
+    function selectStage(stageNum) {
+      document.querySelectorAll('.stage-pill').forEach(el => el.classList.remove('active'));
+      const activePill = document.getElementById('pill-' + stageNum);
+      if (activePill) activePill.classList.add('active');
+
+      const data = stages[stageNum];
+      const panel = document.getElementById('stage-detail-panel');
+      panel.innerHTML = `
+        <div class="flex flex-col md:flex-row md:items-center justify-between pb-4 border-b border-[var(--card-border)] mb-4 gap-2">
+          <div>
+            <h3 class="text-lg md:text-xl font-bold">${data.title}</h3>
+            <span class="inline-block px-2.5 py-1 text-xs font-semibold rounded-md ${data.badgeColor} mt-1">${data.badge}</span>
+          </div>
+        </div>
+        <p class="text-sm text-[var(--text-main)] mb-4">${data.desc}</p>
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-4">
+          <div class="space-y-3">
+            <h4 class="text-xs font-bold uppercase tracking-wider text-[var(--text-muted)]">Key Mechanisms & Invariants</h4>
+            <ul class="text-xs space-y-2 text-[var(--text-muted)] list-disc pl-4">
+              ${data.points.map(p => `<li>${p}</li>`).join('')}
+            </ul>
+          </div>
+          <div>
+            <h4 class="text-xs font-bold uppercase tracking-wider text-[var(--text-muted)] mb-2">Core Code Implementation</h4>
+            <pre class="bg-black/40 text-emerald-300 p-4 rounded-xl text-xs font-mono overflow-x-auto border border-[var(--card-border)]"><code>${data.codeSnippet}</code></pre>
+          </div>
+        </div>
+      `;
+    }
+
+    function switchView(viewName) {
+      document.getElementById('view-pipeline').classList.add('hidden');
+      document.getElementById('view-dataflow').classList.add('hidden');
+      document.getElementById('view-cloud').classList.add('hidden');
+
+      document.getElementById('tab-pipeline').className = "px-4 py-2 text-sm font-semibold rounded-lg card text-[var(--text-muted)] hover:text-[var(--text-main)]";
+      document.getElementById('tab-dataflow').className = "px-4 py-2 text-sm font-semibold rounded-lg card text-[var(--text-muted)] hover:text-[var(--text-main)]";
+      document.getElementById('tab-cloud').className = "px-4 py-2 text-sm font-semibold rounded-lg card text-[var(--text-muted)] hover:text-[var(--text-main)]";
+
+      document.getElementById('view-' + viewName).classList.remove('hidden');
+      document.getElementById('tab-' + viewName).className = "px-4 py-2 text-sm font-semibold rounded-lg bg-blue-600 text-white shadow-sm";
+    }
+
+    function toggleTheme() {
+      document.body.classList.toggle('light-mode');
+      const isLight = document.body.classList.contains('light-mode');
+      document.getElementById('theme-icon').textContent = isLight ? '🌙' : '☀️';
+      document.getElementById('theme-text').textContent = isLight ? 'Dark Mode' : 'Light Mode';
+    }
+
+    // Default initialization
+    selectStage(1);
+  </script>
+</body>
+</html>

@@ -35,6 +35,11 @@ htmlcov/
 dbt/target/
 dbt/dbt_packages/
 dbt/logs/
+dbt_home_credit/target/
+dbt_home_credit/dbt_packages/
+dbt_home_credit/logs/
+target/
+*.user.yml
 
 # Feast
 feature_store/data/registry.db
@@ -52,3 +57,8 @@ azurite_data/
 Thumbs.db
 .vscode/
 .idea/
+
+# Local documentation, roadmaps and helper scripts
+Roadmap Modular PROJ-02*.xlsx
+DATA_ENGINEERING_STEP_BY_STEP_GUIDE.md
+scripts/check_ci.py
