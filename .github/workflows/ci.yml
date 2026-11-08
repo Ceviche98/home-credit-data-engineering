@@ -2,32 +2,27 @@ name: CI Pipeline
 
 on:
   push:
-    branches: [main, master]
+    branches: [main, master, develop]
   pull_request:
-    branches: [main, master]
+    branches: [main, master, develop]
 
 jobs:
   lint-and-test:
     name: Code Quality, Contracts & Idempotency Tests
     runs-on: ubuntu-latest
 
-    services:
-      # Azurite (Azure Storage emulator) for idempotent landing ingestion tests
-      azurite:
-        image: mcr.microsoft.com/azure-storage/azurite:latest
-        ports:
-          - 10000:10000
-        options: --skipApiVersionCheck
-
-      # Redis for Feature Store online testing
-      redis:
-        image: redis:7-alpine
-        ports:
-          - 6379:6379
-
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
+
+      - name: Start Docker Services (Azurite & Redis)
+        run: docker compose -f docker/docker-compose.yml up -d
+
+      - name: Set up Java 17 (for PySpark)
+        uses: actions/setup-java@v5
+        with:
+          distribution: "temurin"
+          java-version: "17"
 
       - name: Set up Python 3.11
         uses: actions/setup-python@v5
@@ -53,4 +48,4 @@ jobs:
       - name: Validate dbt Lineage & Models
         run: |
           cd dbt_home_credit
-          dbt parse --profiles-dir .
+          dbt parse --profiles-dir . --no-partial-parse
