@@ -35,6 +35,11 @@ htmlcov/
 dbt/target/
 dbt/dbt_packages/
 dbt/logs/
+dbt_home_credit/target/
+dbt_home_credit/dbt_packages/
+dbt_home_credit/logs/
+target/
+*.user.yml
 
 # Feast
 feature_store/data/registry.db

@@ -48,4 +48,4 @@ jobs:
       - name: Validate dbt Lineage & Models
         run: |
           cd dbt_home_credit
-          dbt parse --profiles-dir .
+          dbt parse --profiles-dir . --no-partial-parse
