@@ -52,3 +52,8 @@ azurite_data/
 Thumbs.db
 .vscode/
 .idea/
+
+# Local documentation, roadmaps and helper scripts
+Roadmap Modular PROJ-02*.xlsx
+DATA_ENGINEERING_STEP_BY_STEP_GUIDE.md
+scripts/check_ci.py
