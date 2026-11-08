@@ -11,22 +11,12 @@ jobs:
     name: Code Quality, Contracts & Idempotency Tests
     runs-on: ubuntu-latest
 
-    services:
-      # Azurite (Azure Storage emulator) for idempotent landing ingestion tests
-      azurite:
-        image: mcr.microsoft.com/azure-storage/azurite:latest
-        ports:
-          - 10000:10000
-
-      # Redis for Feature Store online testing
-      redis:
-        image: redis:7-alpine
-        ports:
-          - 6379:6379
-
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
+
+      - name: Start Docker Services (Azurite & Redis)
+        run: docker compose -f docker/docker-compose.yml up -d
 
       - name: Set up Java 17 (for PySpark)
         uses: actions/setup-java@v4
