@@ -20,6 +20,48 @@ This project creates a reliable data factory. It takes raw files, cleans the err
 
 ---
 
+## Architecture diagram
+
+![Home Credit Lakehouse Architecture](docs/architecture_diagram.svg)
+
+```mermaid
+flowchart LR
+    subgraph Sources["Raw Sources (58.5M rows)"]
+      S1["application (train/test)<br/>356k rows"]
+      S2["bureau & bureau_balance<br/>28.9M records"]
+      S3["previous_application<br/>1.6M proposals"]
+      S4["installments_payments<br/>13.6M payments"]
+      S5["POS_CASH & credit_card<br/>13.8M balances"]
+    end
+
+    subgraph LandingBronze["Landing & Bronze"]
+      L1["Azure Blob Landing<br/>4MB Blocks + SHA-256"]
+      B1["Bronze Delta Lake<br/>ACID Ingestion Ledger"]
+    end
+
+    subgraph SilverRefinery["Silver Refinery"]
+      C1["Sentinel 365243 Fix<br/>27M Entity Resolution Join<br/>INSTALLMENT_ID Surrogate Key"]
+      C2["Delta MERGE INTO<br/>OPTIMIZE ZORDER (SK_ID_CURR)"]
+    end
+
+    subgraph GoldQuality["Gold & Quality Gates"]
+      G1["dbt Feature Mart<br/>307k rows x 152 columns"]
+      Q1["Quality Circuit Breaker<br/>15 Checks Gatekeeper"]
+    end
+
+    subgraph Serving["Dual Feature Store"]
+      F1["Feast Offline (Delta)<br/>Zero-Leakage Training"]
+      R1["Redis Online Cache<br/>0.83 ms Latency"]
+    end
+
+    Sources --> LandingBronze
+    LandingBronze --> SilverRefinery
+    SilverRefinery --> GoldQuality
+    GoldQuality --> Serving
+```
+
+---
+
 ## The three data layers (Medallion architecture)
 
 The data flows through three progressive stages, often called Bronze, Silver, and Gold.
