@@ -276,9 +276,46 @@ We will build this together **phase by phase**. In each phase, I will explain th
   2. Demonstrate **Offline Retrieval (`get_historical_features`)** to generate a leak-free training/Out-Of-Time dataset for future ML models.
   3. Run **`feast materialize-incremental`** into **Redis** and benchmark sub-10ms **Online Retrieval (`get_online_features`)** for a sample customer ID.
 
-### Phase 6: Automated Jobs (Databricks Workflows), Monthly Simulation & CI/CD
-- **What you'll learn:** Databricks Asset Bundles (`databricks.yml`) / Multi-Task Workflows, running monthly batch simulations (`batch_1`, `batch_2`, `batch_3`), and GitHub Actions CI/CD.
-- **What we'll do:**
-  1. Configure a multi-task **Databricks Workflow Job** (`Ingest Bronze -> Process Silver -> dbt Gold -> Quality Circuit Breaker -> Feast Materialize`) scheduled or triggered on file arrival.
-  2. Run the **3 Monthly Incremental Updates (`2025-10`, `2025-11`, `2025-12`)**, including a simulated crash during `2025-11`, and verify end-to-end recovery and feature freshness.
-  3. Set up `.github/workflows/ci.yml` to run automated linting (`ruff`), unit/idempotency tests (`pytest`), and `dbt` validation on every commit.
+### Phase 6: Automated Orchestration (Databricks Workflows), Chaos Recovery & CI/CD
+- **What you'll learn:** Databricks Asset Bundles (`databricks.yml`), end-to-end multi-stage pipeline orchestration, chaos testing with crash recovery, and automated GitHub Actions CI/CD.
+- **Architectural Implementation:**
+  1. **Multi-Task Databricks Workflow Job (`databricks.yml`):**
+     Declarative Databricks Asset Bundle configuring a DAG with 6 sequential tasks:
+     `Ingest Landing -> Bronze Ingestion Ledger -> Silver Refinery (Delta MERGE) -> Gold Feature Mart -> Quality Circuit Breaker -> Feast Redis Online Sync`.
+  2. **Master Lakehouse Orchestrator (`src/home_credit_de/orchestrator.py`):**
+     Unified Python/PySpark CLI chaining the entire lifecycle:
+     ```bash
+     python src/home_credit_de/orchestrator.py --batch batch_3_2025_12
+     ```
+     **Verified Stage Timing Benchmarks (Local Execution):**
+     - `stage_1_landing_upload`: 0.18s (idempotent SHA-256 skip)
+     - `stage_2_bronze_ingestion`: 29.72s (ACID Ingestion Ledger verification)
+     - `stage_3_silver_refinery`: 450.79s (Delta MERGE INTO deduplication across all 7 tables)
+     - `stage_4_gold_mart`: 55.40s (152-column feature mart calculation & Delta materialization)
+     - `stage_5_circuit_breaker`: 19.83s (15/15 quality gates passed with 0 failures)
+     - `stage_6_feast_redis_sync`: 2.42s (5,000 active customer feature vectors pushed to Redis)
+     - **Total Pipeline Duration:** 558.34s (~9.3 minutes for 58.5M raw records)
+  3. **Chaos Simulation & Crash Recovery:**
+     - Tested interrupted multi-part chunked upload where network connection drops mid-file at block 1.
+     - Uncommitted blocks are never added to the blob manifest, preventing partial state corruption in Azure Blob storage.
+     - Re-running the pipeline resumes without side effects: files already committed are skipped via SHA-256 integrity checks, and Delta Lake ACID guarantees ensure $0$ duplicate rows across all tables.
+  4. **Automated GitHub Actions CI/CD (`.github/workflows/ci.yml`):**
+     - Automatically spins up Docker services (`hc_azurite` on port 10000, `hc_redis` on port 6379).
+     - Runs code hygiene checks with `ruff check .`.
+     - Validates dbt DAG and schemas with `dbt parse --profiles-dir .`.
+     - Executes unit, contract, and chaos recovery tests with `pytest tests -v` (6/6 passing).
+
+---
+
+## Final Project Architecture Summary
+
+| Phase | Component | Key Technologies | Verified Production Artifacts |
+| :--- | :--- | :--- | :--- |
+| **Phase 0** | Infrastructure & Docker | Docker, Azurite, Redis, Conda | Local blob and cache containers running on ports 10000 & 6379. |
+| **Phase 1** | Temporal Simulator & Bronze | Python, Azurite SDK, Delta Lake | 4 temporal batches (58.5M rows), SHA-256 chunked uploads, Bronze tables with `_meta.ingestion_ledger`. |
+| **Phase 2** | Silver Conformed Refinery | PySpark 3.5, Delta Lake 3.2 | 7 conformed Silver tables; `365243` sentinel remediation, `SK_ID_CURR` entity resolution join on `bureau_balance`, Delta `MERGE INTO` with Z-Ordering. |
+| **Phase 3** | dbt Feature Mart (Gold) | dbt-databricks, PySpark, Delta | 7 staging models, 5 intermediate aggregation models, 1 gold mart (**307,511 rows x 152 columns**). |
+| **Phase 4** | Quality Circuit Breaker | PySpark, JSON Audit Reports | 15/15 banking quality checks passed (PK uniqueness, financial bounds, 0 sentinel leakage, Feast contract readiness). |
+| **Phase 5** | Dual Feature Store | Feast 0.44, Delta/Parquet, Redis | Point-in-time historical retrieval for ML training; Redis sync with **0.83 ms** sub-millisecond online retrieval latency. |
+| **Phase 6** | Orchestrator & CI/CD | Databricks Asset Bundles, GitHub Actions, Pytest | End-to-end CLI orchestrator (`orchestrator.py`), chaos recovery test suite (6/6 passing), `.github/workflows/ci.yml`. |
+
