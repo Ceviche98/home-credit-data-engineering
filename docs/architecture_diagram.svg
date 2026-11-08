@@ -1,322 +1,282 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" width="100%" height="100%" style="background-color: #0d1117; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 620" width="100%" height="100%" style="background-color: #0b0f19; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
   <defs>
     <!-- Gradients -->
-    <linearGradient id="landingGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#1e293b" />
+    <linearGradient id="cardBg" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#161e2e" />
       <stop offset="100%" stop-color="#0f172a" />
     </linearGradient>
-    <linearGradient id="bronzeGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#78350f" stop-opacity="0.8" />
-      <stop offset="100%" stop-color="#451a03" stop-opacity="0.9" />
+    <linearGradient id="accentBronze" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#d97706" />
+      <stop offset="100%" stop-color="#b45309" />
     </linearGradient>
-    <linearGradient id="silverGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#0e7490" stop-opacity="0.8" />
-      <stop offset="100%" stop-color="#155e75" stop-opacity="0.9" />
+    <linearGradient id="accentSilver" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#0284c7" />
+      <stop offset="100%" stop-color="#0369a1" />
     </linearGradient>
-    <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#047857" stop-opacity="0.8" />
-      <stop offset="100%" stop-color="#064e3b" stop-opacity="0.9" />
+    <linearGradient id="accentGold" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#10b981" />
+      <stop offset="100%" stop-color="#047857" />
     </linearGradient>
-    <linearGradient id="qualityGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#be123c" stop-opacity="0.8" />
-      <stop offset="100%" stop-color="#881337" stop-opacity="0.9" />
+    <linearGradient id="accentFeast" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#8b5cf6" />
+      <stop offset="100%" stop-color="#6d28d9" />
     </linearGradient>
-    <linearGradient id="fsGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#6d28d9" stop-opacity="0.8" />
-      <stop offset="100%" stop-color="#4c1d95" stop-opacity="0.9" />
-    </linearGradient>
-    
+
+    <!-- Drop Shadow Filter -->
+    <filter id="dropShadow" x="-5%" y="-5%" width="110%" height="115%">
+      <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#000000" flood-opacity="0.4" />
+    </filter>
+
     <!-- Arrow Marker -->
-    <marker id="arrow" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-      <path d="M 0 1 L 8 5 L 0 9 z" fill="#64748b" />
-    </marker>
-    <marker id="arrowBlue" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-      <path d="M 0 1 L 8 5 L 0 9 z" fill="#38bdf8" />
+    <marker id="flowArrow" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#64748b" />
     </marker>
   </defs>
 
-  <!-- Title & Header -->
-  <text x="50" y="55" fill="#f8fafc" font-size="26" font-weight="bold">Home Credit Lakehouse Architecture</text>
-  <text x="50" y="82" fill="#94a3b8" font-size="14">End-to-End Medallion Lakehouse • dbt-databricks • Quality Circuit Breaker • Dual Feature Store</text>
-  
-  <!-- CI/CD & Orchestration Header Banner -->
-  <rect x="750" y="35" width="400" height="55" rx="8" fill="#1e293b" stroke="#334155" stroke-width="1.5" />
-  <circle cx="775" cy="62" r="6" fill="#38bdf8" />
-  <text x="795" y="55" fill="#f8fafc" font-size="13" font-weight="600">Orchestration &amp; CI/CD</text>
-  <text x="795" y="73" fill="#94a3b8" font-size="11">GitHub Actions • Databricks Asset Bundles • Pytest</text>
+  <!-- ==================== HEADER SECTION ==================== -->
+  <g transform="translate(40, 28)">
+    <text x="0" y="22" fill="#f8fafc" font-size="22" font-weight="700" letter-spacing="-0.5">Home Credit Senior Data Engineering Lakehouse</text>
+    <text x="0" y="44" fill="#94a3b8" font-size="13">End-to-End Medallion Pipeline • dbt Core • Quality Circuit Breaker • Feast Feature Store</text>
+    
+    <!-- Top Right Meta Badges -->
+    <g transform="translate(850, 0)">
+      <rect x="0" y="2" width="170" height="36" rx="6" fill="#1e293b" stroke="#334155" stroke-width="1" />
+      <circle cx="16" cy="20" r="4" fill="#10b981" />
+      <text x="28" y="24" fill="#e2e8f0" font-size="11" font-weight="600">CI/CD Pipeline: Verified</text>
+      
+      <rect x="180" y="2" width="170" height="36" rx="6" fill="#1e293b" stroke="#334155" stroke-width="1" />
+      <circle cx="196" cy="20" r="4" fill="#38bdf8" />
+      <text x="208" y="24" fill="#e2e8f0" font-size="11" font-weight="600">Zero Leakage Serving</text>
+    </g>
+  </g>
 
-  <!-- ==================== COLUMN 1: RAW SOURCES ==================== -->
-  <g transform="translate(50, 120)">
-    <rect x="0" y="0" width="160" height="730" rx="12" fill="url(#landingGrad)" stroke="#334155" stroke-width="1.5" />
-    <text x="20" y="35" fill="#38bdf8" font-size="12" font-weight="bold" letter-spacing="1">RAW SOURCES</text>
-    <text x="20" y="55" fill="#f8fafc" font-size="15" font-weight="bold">7 Relational CSVs</text>
-    <text x="20" y="73" fill="#64748b" font-size="11">58.5M Total Records</text>
+  <!-- Flow Connector Lines Behind Cards -->
+  <line x1="260" y1="310" x2="285" y2="310" stroke="#475569" stroke-width="2" marker-end="url(#flowArrow)" />
+  <line x1="505" y1="310" x2="530" y2="310" stroke="#475569" stroke-width="2" marker-end="url(#flowArrow)" />
+  <line x1="750" y1="310" x2="775" y2="310" stroke="#475569" stroke-width="2" marker-end="url(#flowArrow)" />
+  <line x1="995" y1="310" x2="1020" y2="310" stroke="#475569" stroke-width="2" marker-end="url(#flowArrow)" />
+
+  <!-- ==================== STAGE 1: RAW SOURCES ==================== -->
+  <g transform="translate(40, 95)">
+    <rect x="0" y="0" width="220" height="430" rx="10" fill="url(#cardBg)" stroke="#334155" stroke-width="1" filter="url(#dropShadow)" />
+    <rect x="0" y="0" width="220" height="6" rx="3" fill="#64748b" />
+    <text x="16" y="32" fill="#cbd5e1" font-size="11" font-weight="700" letter-spacing="1">RAW SOURCES</text>
+    <text x="16" y="52" fill="#f8fafc" font-size="15" font-weight="700">7 Relational CSVs</text>
+    <text x="16" y="70" fill="#64748b" font-size="11">58.5M Total Historical Records</text>
 
     <!-- Source Items -->
-    <g transform="translate(15, 95)">
-      <rect x="0" y="0" width="130" height="70" rx="6" fill="#1e293b" stroke="#475569" stroke-width="1" />
-      <text x="12" y="24" fill="#f8fafc" font-size="12" font-weight="600">application</text>
-      <text x="12" y="42" fill="#94a3b8" font-size="10">train / test</text>
-      <text x="12" y="58" fill="#38bdf8" font-size="10">356k rows (PK: CURR)</text>
+    <g transform="translate(12, 85)">
+      <rect x="0" y="0" width="196" height="44" rx="6" fill="#1e293b" stroke="#334155" stroke-width="0.8" />
+      <text x="10" y="20" fill="#f1f5f9" font-size="12" font-weight="600">application_train/test</text>
+      <text x="10" y="36" fill="#94a3b8" font-size="11">356k rows (Target &amp; Demographics)</text>
     </g>
 
-    <g transform="translate(15, 175)">
-      <rect x="0" y="0" width="130" height="60" rx="6" fill="#1e293b" stroke="#475569" stroke-width="1" />
-      <text x="12" y="24" fill="#f8fafc" font-size="12" font-weight="600">bureau</text>
-      <text x="12" y="42" fill="#94a3b8" font-size="10">1.7M rows</text>
-      <text x="12" y="54" fill="#38bdf8" font-size="10">PK: SK_ID_BUREAU</text>
+    <g transform="translate(12, 137)">
+      <rect x="0" y="0" width="196" height="44" rx="6" fill="#1e293b" stroke="#334155" stroke-width="0.8" />
+      <text x="10" y="20" fill="#f1f5f9" font-size="12" font-weight="600">bureau &amp; bureau_balance</text>
+      <text x="10" y="36" fill="#94a3b8" font-size="11">28.9M records (Credit History)</text>
     </g>
 
-    <g transform="translate(15, 245)">
-      <rect x="0" y="0" width="130" height="60" rx="6" fill="#1e293b" stroke="#475569" stroke-width="1" />
-      <text x="12" y="24" fill="#f8fafc" font-size="12" font-weight="600">bureau_balance</text>
-      <text x="12" y="42" fill="#94a3b8" font-size="10">27.2M monthly status</text>
-      <text x="12" y="54" fill="#f59e0b" font-size="10">No SK_ID_CURR</text>
+    <g transform="translate(12, 189)">
+      <rect x="0" y="0" width="196" height="44" rx="6" fill="#1e293b" stroke="#334155" stroke-width="0.8" />
+      <text x="10" y="20" fill="#f1f5f9" font-size="12" font-weight="600">previous_application</text>
+      <text x="10" y="36" fill="#94a3b8" font-size="11">1.67M past loan proposals</text>
     </g>
 
-    <g transform="translate(15, 315)">
-      <rect x="0" y="0" width="130" height="60" rx="6" fill="#1e293b" stroke="#475569" stroke-width="1" />
-      <text x="12" y="24" fill="#f8fafc" font-size="12" font-weight="600">previous_app</text>
-      <text x="12" y="42" fill="#94a3b8" font-size="10">1.6M proposals</text>
-      <text x="12" y="54" fill="#38bdf8" font-size="10">PK: SK_ID_PREV</text>
+    <g transform="translate(12, 241)">
+      <rect x="0" y="0" width="196" height="44" rx="6" fill="#1e293b" stroke="#334155" stroke-width="0.8" />
+      <text x="10" y="20" fill="#f1f5f9" font-size="12" font-weight="600">installments_payments</text>
+      <text x="10" y="36" fill="#94a3b8" font-size="11">13.6M repayment records</text>
     </g>
 
-    <g transform="translate(15, 385)">
-      <rect x="0" y="0" width="130" height="60" rx="6" fill="#1e293b" stroke="#475569" stroke-width="1" />
-      <text x="12" y="24" fill="#f8fafc" font-size="12" font-weight="600">installments</text>
-      <text x="12" y="42" fill="#94a3b8" font-size="10">13.6M payments</text>
-      <text x="12" y="54" fill="#f59e0b" font-size="10">Partial split pays</text>
+    <g transform="translate(12, 293)">
+      <rect x="0" y="0" width="196" height="44" rx="6" fill="#1e293b" stroke="#334155" stroke-width="0.8" />
+      <text x="10" y="20" fill="#f1f5f9" font-size="12" font-weight="600">POS_CASH &amp; credit_card</text>
+      <text x="10" y="36" fill="#94a3b8" font-size="11">13.8M monthly loan balances</text>
     </g>
 
-    <g transform="translate(15, 455)">
-      <rect x="0" y="0" width="130" height="60" rx="6" fill="#1e293b" stroke="#475569" stroke-width="1" />
-      <text x="12" y="24" fill="#f8fafc" font-size="12" font-weight="600">POS_CASH_bal</text>
-      <text x="12" y="42" fill="#94a3b8" font-size="10">10.0M monthly</text>
-      <text x="12" y="54" fill="#38bdf8" font-size="10">Point-of-sale logs</text>
-    </g>
-
-    <g transform="translate(15, 525)">
-      <rect x="0" y="0" width="130" height="60" rx="6" fill="#1e293b" stroke="#475569" stroke-width="1" />
-      <text x="12" y="24" fill="#f8fafc" font-size="12" font-weight="600">credit_card_bal</text>
-      <text x="12" y="42" fill="#94a3b8" font-size="10">3.8M monthly</text>
-      <text x="12" y="54" fill="#38bdf8" font-size="10">Revolving lines</text>
-    </g>
-
-    <g transform="translate(15, 600)">
-      <rect x="0" y="0" width="130" height="110" rx="6" fill="#0f172a" stroke="#38bdf8" stroke-dasharray="3 3" />
-      <text x="10" y="22" fill="#38bdf8" font-size="11" font-weight="bold">Ingestion Invariants</text>
-      <text x="10" y="42" fill="#94a3b8" font-size="10">• 4MB Block Blobs</text>
-      <text x="10" y="58" fill="#94a3b8" font-size="10">• SHA-256 Hashes</text>
-      <text x="10" y="74" fill="#94a3b8" font-size="10">• Idempotent Skips</text>
-      <text x="10" y="90" fill="#94a3b8" font-size="10">• _SUCCESS.json</text>
+    <!-- Ingestion Footer Badge -->
+    <g transform="translate(12, 350)">
+      <rect x="0" y="0" width="196" height="62" rx="6" fill="#0f172a" stroke="#1e293b" stroke-width="1" />
+      <text x="10" y="20" fill="#38bdf8" font-size="11" font-weight="700">Ingestion Protocol</text>
+      <text x="10" y="36" fill="#94a3b8" font-size="10.5">• 4MB chunked streaming</text>
+      <text x="10" y="51" fill="#94a3b8" font-size="10.5">• Azure Blob / Azurite landing</text>
     </g>
   </g>
 
-  <!-- Connect 1 -> 2 -->
-  <line x1="210" y1="480" x2="250" y2="480" stroke="#64748b" stroke-width="2" marker-end="url(#arrow)" />
+  <!-- ==================== STAGE 2: BRONZE LAYER ==================== -->
+  <g transform="translate(285, 95)">
+    <rect x="0" y="0" width="220" height="430" rx="10" fill="url(#cardBg)" stroke="#d97706" stroke-width="1" filter="url(#dropShadow)" />
+    <rect x="0" y="0" width="220" height="6" rx="3" fill="url(#accentBronze)" />
+    <text x="16" y="32" fill="#f59e0b" font-size="11" font-weight="700" letter-spacing="1">BRONZE LAYER</text>
+    <text x="16" y="52" fill="#f8fafc" font-size="15" font-weight="700">Raw Delta Lake</text>
+    <text x="16" y="70" fill="#94a3b8" font-size="11">Immutable Audit Landing</text>
 
-  <!-- ==================== COLUMN 2: BRONZE LAYER ==================== -->
-  <g transform="translate(250, 120)">
-    <rect x="0" y="0" width="180" height="730" rx="12" fill="url(#bronzeGrad)" stroke="#d97706" stroke-width="1.5" />
-    <text x="20" y="35" fill="#fcd34d" font-size="12" font-weight="bold" letter-spacing="1">BRONZE LAYER</text>
-    <text x="20" y="55" fill="#f8fafc" font-size="15" font-weight="bold">Raw Delta Lake</text>
-    <text x="20" y="73" fill="#fde68a" font-size="11">Append-Only • Untyped Strings</text>
-
-    <!-- Bronze Features Box -->
-    <g transform="translate(15, 95)">
-      <rect x="0" y="0" width="150" height="230" rx="8" fill="#1e293b" stroke="#78350f" stroke-width="1.5" />
-      <text x="15" y="28" fill="#fcd34d" font-size="13" font-weight="bold">7 Bronze Tables</text>
-      <text x="15" y="55" fill="#e2e8f0" font-size="11">1. bronze/app_train</text>
-      <text x="15" y="80" fill="#e2e8f0" font-size="11">2. bronze/app_test</text>
-      <text x="15" y="105" fill="#e2e8f0" font-size="11">3. bronze/bureau</text>
-      <text x="15" y="130" fill="#e2e8f0" font-size="11">4. bronze/bureau_bal</text>
-      <text x="15" y="155" fill="#e2e8f0" font-size="11">5. bronze/prev_app</text>
-      <text x="15" y="180" fill="#e2e8f0" font-size="11">6. bronze/installments</text>
-      <text x="15" y="205" fill="#e2e8f0" font-size="11">7. bronze/pos_cash</text>
+    <g transform="translate(12, 85)">
+      <rect x="0" y="0" width="196" height="120" rx="6" fill="#1e293b" stroke="#451a03" stroke-width="0.8" />
+      <text x="10" y="22" fill="#fde68a" font-size="12" font-weight="700">Storage Principles</text>
+      <text x="10" y="44" fill="#cbd5e1" font-size="11">• 100% Append-Only Delta</text>
+      <text x="10" y="64" fill="#cbd5e1" font-size="11">• All columns string-cast</text>
+      <text x="10" y="84" fill="#cbd5e1" font-size="11">• Preserves source errors</text>
+      <text x="10" y="104" fill="#cbd5e1" font-size="11">• Full replayable history</text>
     </g>
 
-    <!-- Ingestion Ledger Box -->
-    <g transform="translate(15, 345)">
-      <rect x="0" y="0" width="150" height="180" rx="8" fill="#0f172a" stroke="#f59e0b" stroke-width="1.5" />
-      <circle cx="28" cy="28" r="5" fill="#f59e0b" />
-      <text x="42" y="32" fill="#fcd34d" font-size="12" font-weight="bold">Ingestion Ledger</text>
-      <text x="15" y="60" fill="#94a3b8" font-size="10">_meta/ingestion_ledger</text>
-      <text x="15" y="85" fill="#cbd5e1" font-size="10">• batch_id verification</text>
-      <text x="15" y="105" fill="#cbd5e1" font-size="10">• row count audit</text>
-      <text x="15" y="125" fill="#cbd5e1" font-size="10">• ingestion timestamps</text>
-      <text x="15" y="145" fill="#cbd5e1" font-size="10">• prevents replay dupes</text>
-      <text x="15" y="165" fill="#f59e0b" font-size="10">ACID Transaction Log</text>
+    <g transform="translate(12, 215)">
+      <rect x="0" y="0" width="196" height="95" rx="6" fill="#1e293b" stroke="#451a03" stroke-width="0.8" />
+      <text x="10" y="22" fill="#fde68a" font-size="12" font-weight="700">Audit Metadata</text>
+      <text x="10" y="44" fill="#cbd5e1" font-size="11">• _meta_batch_id (UUID)</text>
+      <text x="10" y="64" fill="#cbd5e1" font-size="11">• _meta_source_file</text>
+      <text x="10" y="84" fill="#cbd5e1" font-size="11">• _meta_ingested_at (UTC)</text>
     </g>
 
-    <!-- Metadata Audit Columns Box -->
-    <g transform="translate(15, 545)">
-      <rect x="0" y="0" width="150" height="165" rx="8" fill="#1e293b" stroke="#78350f" stroke-width="1.5" />
-      <text x="15" y="28" fill="#fcd34d" font-size="12" font-weight="bold">Audit Columns</text>
-      <text x="15" y="55" fill="#94a3b8" font-size="10">Injected on arrival:</text>
-      <text x="15" y="80" fill="#38bdf8" font-size="10 font-mono">_meta_batch_id</text>
-      <text x="15" y="105" fill="#38bdf8" font-size="10 font-mono">_meta_source_file</text>
-      <text x="15" y="130" fill="#38bdf8" font-size="10 font-mono">_meta_ingested_at</text>
-      <text x="15" y="150" fill="#a1a1aa" font-size="10">Zero data alteration</text>
+    <g transform="translate(12, 320)">
+      <rect x="0" y="0" width="196" height="92" rx="6" fill="#0f172a" stroke="#451a03" stroke-width="1" />
+      <text x="10" y="22" fill="#f59e0b" font-size="11" font-weight="700">Ingestion Ledger</text>
+      <text x="10" y="42" fill="#94a3b8" font-size="10.5">• SHA-256 hash tracking</text>
+      <text x="10" y="58" fill="#94a3b8" font-size="10.5">• Re-run deduplication</text>
+      <text x="10" y="74" fill="#94a3b8" font-size="10.5">• ACID transaction logs</text>
     </g>
   </g>
 
-  <!-- Connect 2 -> 3 -->
-  <line x1="430" y1="480" x2="470" y2="480" stroke="#64748b" stroke-width="2" marker-end="url(#arrow)" />
+  <!-- ==================== STAGE 3: SILVER LAYER ==================== -->
+  <g transform="translate(530, 95)">
+    <rect x="0" y="0" width="220" height="430" rx="10" fill="url(#cardBg)" stroke="#0284c7" stroke-width="1" filter="url(#dropShadow)" />
+    <rect x="0" y="0" width="220" height="6" rx="3" fill="url(#accentSilver)" />
+    <text x="16" y="32" fill="#38bdf8" font-size="11" font-weight="700" letter-spacing="1">SILVER LAYER</text>
+    <text x="16" y="52" fill="#f8fafc" font-size="15" font-weight="700">Conformed Refinery</text>
+    <text x="16" y="70" fill="#94a3b8" font-size="11">PySpark • Cleansed Tables</text>
 
-  <!-- ==================== COLUMN 3: SILVER LAYER ==================== -->
-  <g transform="translate(470, 120)">
-    <rect x="0" y="0" width="200" height="730" rx="12" fill="url(#silverGrad)" stroke="#06b6d4" stroke-width="1.5" />
-    <text x="20" y="35" fill="#67e8f9" font-size="12" font-weight="bold" letter-spacing="1">SILVER LAYER</text>
-    <text x="20" y="55" fill="#f8fafc" font-size="15" font-weight="bold">Conformed Refinery</text>
-    <text x="20" y="73" fill="#cffafe" font-size="11">PySpark • Delta MERGE • Z-Order</text>
-
-    <!-- Transformations -->
-    <g transform="translate(15, 95)">
-      <rect x="0" y="0" width="170" height="110" rx="8" fill="#1e293b" stroke="#0891b2" stroke-width="1.5" />
-      <text x="15" y="25" fill="#67e8f9" font-size="12" font-weight="bold">1. Sentinel Remediation</text>
-      <text x="15" y="50" fill="#f43f5e" font-size="11 font-mono">365243.0 ➔ NULL</text>
-      <text x="15" y="72" fill="#94a3b8" font-size="10">Replaced 1000-year sentinel</text>
-      <text x="15" y="88" fill="#94a3b8" font-size="10">in DAYS_EMPLOYED / DAYS_*</text>
+    <g transform="translate(12, 85)">
+      <rect x="0" y="0" width="196" height="75" rx="6" fill="#1e293b" stroke="#075985" stroke-width="0.8" />
+      <text x="10" y="20" fill="#38bdf8" font-size="11.5" font-weight="700">1. Sentinel Remediation</text>
+      <text x="10" y="38" fill="#cbd5e1" font-size="11">• 365243.0 days → NULL</text>
+      <text x="10" y="56" fill="#94a3b8" font-size="10.5">(1,000-year legacy placeholder)</text>
     </g>
 
-    <g transform="translate(15, 215)">
-      <rect x="0" y="0" width="170" height="110" rx="8" fill="#1e293b" stroke="#0891b2" stroke-width="1.5" />
-      <text x="15" y="25" fill="#67e8f9" font-size="12" font-weight="bold">2. Entity Resolution</text>
-      <text x="15" y="50" fill="#a5f3fc" font-size="10">bureau_bal (27.2M)</text>
-      <text x="15" y="68" fill="#94a3b8" font-size="10">⨝ bureau on SK_ID_BUREAU</text>
-      <text x="15" y="88" fill="#38bdf8" font-size="10 font-bold">Attaches SK_ID_CURR</text>
+    <g transform="translate(12, 168)">
+      <rect x="0" y="0" width="196" height="75" rx="6" fill="#1e293b" stroke="#075985" stroke-width="0.8" />
+      <text x="10" y="20" fill="#38bdf8" font-size="11.5" font-weight="700">2. 27.2M Entity Join</text>
+      <text x="10" y="38" fill="#cbd5e1" font-size="11">• bureau_balance ⨝ bureau</text>
+      <text x="10" y="56" fill="#94a3b8" font-size="10.5">Attaches SK_ID_CURR borrower ID</text>
     </g>
 
-    <g transform="translate(15, 335)">
-      <rect x="0" y="0" width="170" height="120" rx="8" fill="#1e293b" stroke="#0891b2" stroke-width="1.5" />
-      <text x="15" y="25" fill="#67e8f9" font-size="12" font-weight="bold">3. Surrogate Keys</text>
-      <text x="15" y="48" fill="#94a3b8" font-size="10">installments_payments:</text>
-      <text x="15" y="68" fill="#f59e0b" font-size="10">INSTALLMENT_ID</text>
-      <text x="15" y="88" fill="#94a3b8" font-size="10">SHA-256 of 6 transaction cols</text>
-      <text x="15" y="104" fill="#34d399" font-size="10 font-bold">Strict ANSI Merge Semantics</text>
+    <g transform="translate(12, 251)">
+      <rect x="0" y="0" width="196" height="75" rx="6" fill="#1e293b" stroke="#075985" stroke-width="0.8" />
+      <text x="10" y="20" fill="#38bdf8" font-size="11.5" font-weight="700">3. Deterministic Keys</text>
+      <text x="10" y="38" fill="#cbd5e1" font-size="11">• SHA-256 for split payments</text>
+      <text x="10" y="56" fill="#94a3b8" font-size="10.5">Guarantees 100% MERGE safety</text>
     </g>
 
-    <g transform="translate(15, 465)">
-      <rect x="0" y="0" width="170" height="110" rx="8" fill="#1e293b" stroke="#0891b2" stroke-width="1.5" />
-      <text x="15" y="25" fill="#67e8f9" font-size="12" font-weight="bold">4. Idempotent Upsert</text>
-      <text x="15" y="48" fill="#a5f3fc" font-size="11 font-mono">Delta MERGE INTO</text>
-      <text x="15" y="70" fill="#94a3b8" font-size="10">whenMatchedUpdateAll</text>
-      <text x="15" y="88" fill="#94a3b8" font-size="10">whenNotMatchedInsertAll</text>
-    </g>
-
-    <g transform="translate(15, 585)">
-      <rect x="0" y="0" width="170" height="125" rx="8" fill="#0f172a" stroke="#22d3ee" stroke-width="1.5" />
-      <text x="15" y="25" fill="#67e8f9" font-size="12" font-weight="bold">5. Physical Tuning</text>
-      <text x="15" y="50" fill="#38bdf8" font-size="10 font-mono">OPTIMIZE ZORDER BY</text>
-      <text x="15" y="70" fill="#e2e8f0" font-size="10 font-bold">(SK_ID_CURR)</text>
-      <text x="15" y="92" fill="#94a3b8" font-size="10">Multidimensional clustering</text>
-      <text x="15" y="108" fill="#94a3b8" font-size="10">90%+ file scan skipping</text>
+    <g transform="translate(12, 334)">
+      <rect x="0" y="0" width="196" height="78" rx="6" fill="#0f172a" stroke="#075985" stroke-width="1" />
+      <text x="10" y="20" fill="#38bdf8" font-size="11.5" font-weight="700">4. Idempotent Upserts</text>
+      <text x="10" y="38" fill="#cbd5e1" font-size="11">• Delta MERGE INTO</text>
+      <text x="10" y="56" fill="#cbd5e1" font-size="11">• OPTIMIZE Z-ORDER (CURR)</text>
     </g>
   </g>
 
-  <!-- Connect 3 -> 4 -->
-  <line x1="670" y1="480" x2="710" y2="480" stroke="#64748b" stroke-width="2" marker-end="url(#arrow)" />
+  <!-- ==================== STAGE 4: GOLD & QUALITY ==================== -->
+  <g transform="translate(775, 95)">
+    <rect x="0" y="0" width="220" height="430" rx="10" fill="url(#cardBg)" stroke="#10b981" stroke-width="1" filter="url(#dropShadow)" />
+    <rect x="0" y="0" width="220" height="6" rx="3" fill="url(#accentGold)" />
+    <text x="16" y="32" fill="#34d399" font-size="11" font-weight="700" letter-spacing="1">GOLD LAYER</text>
+    <text x="16" y="52" fill="#f8fafc" font-size="15" font-weight="700">Feature Mart &amp; Gates</text>
+    <text x="16" y="70" fill="#94a3b8" font-size="11">dbt Core • 152 Indicators</text>
 
-  <!-- ==================== COLUMN 4: GOLD LAYER (DBT) ==================== -->
-  <g transform="translate(710, 120)">
-    <rect x="0" y="0" width="220" height="730" rx="12" fill="url(#goldGrad)" stroke="#10b981" stroke-width="1.5" />
-    <text x="20" y="35" fill="#6ee7b7" font-size="12" font-weight="bold" letter-spacing="1">GOLD LAYER (DBT)</text>
-    <text x="20" y="55" fill="#f8fafc" font-size="15" font-weight="bold">Master Feature Mart</text>
-    <text x="20" y="73" fill="#a7f3d0" font-size="11">307,511 rows × 152 columns</text>
-
-    <!-- dbt DAG Box -->
-    <g transform="translate(15, 95)">
-      <rect x="0" y="0" width="190" height="135" rx="8" fill="#1e293b" stroke="#059669" stroke-width="1.5" />
-      <text x="15" y="25" fill="#6ee7b7" font-size="12" font-weight="bold">7 Staging Models</text>
-      <text x="15" y="48" fill="#94a3b8" font-size="10">stg_application.sql</text>
-      <text x="15" y="66" fill="#94a3b8" font-size="10">stg_bureau.sql &amp; stg_bureau_bal.sql</text>
-      <text x="15" y="84" fill="#94a3b8" font-size="10">stg_previous_application.sql</text>
-      <text x="15" y="102" fill="#94a3b8" font-size="10">stg_installments.sql &amp; stg_pos_cash</text>
-      <text x="15" y="120" fill="#94a3b8" font-size="10">stg_credit_card.sql</text>
+    <g transform="translate(12, 85)">
+      <rect x="0" y="0" width="196" height="125" rx="6" fill="#1e293b" stroke="#065f46" stroke-width="0.8" />
+      <text x="10" y="20" fill="#6ee7b7" font-size="11.5" font-weight="700">Risk Engineered Mart</text>
+      <text x="10" y="38" fill="#cbd5e1" font-size="11">• 307,511 rows × 152 cols</text>
+      <text x="10" y="56" fill="#cbd5e1" font-size="11">• Solvency &amp; debt-to-annuity</text>
+      <text x="10" y="74" fill="#cbd5e1" font-size="11">• Bureau default rates</text>
+      <text x="10" y="92" fill="#cbd5e1" font-size="11">• Late fees &amp; DPD metrics</text>
+      <text x="10" y="110" fill="#cbd5e1" font-size="11">• Revolving card limits</text>
     </g>
 
-    <g transform="translate(15, 240)">
-      <rect x="0" y="0" width="190" height="145" rx="8" fill="#1e293b" stroke="#059669" stroke-width="1.5" />
-      <text x="15" y="25" fill="#6ee7b7" font-size="12" font-weight="bold">5 Intermediate Models</text>
-      <text x="15" y="48" fill="#cbd5e1" font-size="10">int_bureau_features.sql</text>
-      <text x="15" y="68" fill="#cbd5e1" font-size="10">int_previous_app_features.sql</text>
-      <text x="15" y="88" fill="#cbd5e1" font-size="10">int_installments_features.sql</text>
-      <text x="15" y="108" fill="#cbd5e1" font-size="10">int_pos_cash_features.sql</text>
-      <text x="15" y="128" fill="#cbd5e1" font-size="10">int_credit_card_features.sql</text>
+    <g transform="translate(12, 220)">
+      <rect x="0" y="0" width="196" height="95" rx="6" fill="#1e293b" stroke="#065f46" stroke-width="0.8" />
+      <text x="10" y="20" fill="#6ee7b7" font-size="11.5" font-weight="700">Modular dbt DAG</text>
+      <text x="10" y="38" fill="#cbd5e1" font-size="11">• 7 Staging views (casting)</text>
+      <text x="10" y="56" fill="#cbd5e1" font-size="11">• 5 Intermediate aggregates</text>
+      <text x="10" y="74" fill="#cbd5e1" font-size="11">• 1 Master gold table</text>
     </g>
 
-    <g transform="translate(15, 395)">
-      <rect x="0" y="0" width="190" height="175" rx="8" fill="#0f172a" stroke="#34d399" stroke-width="2" />
-      <circle cx="28" cy="25" r="5" fill="#34d399" />
-      <text x="42" y="29" fill="#6ee7b7" font-size="12" font-weight="bold">gold_customer_features</text>
-      <text x="15" y="55" fill="#a7f3d0" font-size="10">• Debt-to-Income / Solvency</text>
-      <text x="15" y="75" fill="#a7f3d0" font-size="10">• External Source Multipliers</text>
-      <text x="15" y="95" fill="#a7f3d0" font-size="10">• Installment Late Fee Totals</text>
-      <text x="15" y="115" fill="#a7f3d0" font-size="10">• Credit Card Revolving Debt</text>
-      <text x="15" y="135" fill="#a7f3d0" font-size="10">• Past Approval/Refusal Rates</text>
-      <text x="15" y="158" fill="#38bdf8" font-size="10 font-bold">VACUUMed Delta Table</text>
-    </g>
-
-    <!-- Circuit Breaker Gate -->
-    <g transform="translate(15, 580)">
-      <rect x="0" y="0" width="190" height="130" rx="8" fill="url(#qualityGrad)" stroke="#f43f5e" stroke-width="2" />
-      <text x="15" y="25" fill="#ffe4e6" font-size="12" font-weight="bold">Circuit Breaker Gate</text>
-      <text x="15" y="48" fill="#fecdd3" font-size="10 font-bold">15/15 Quality Checks Passed</text>
-      <text x="15" y="68" fill="#f8fafc" font-size="10">• PK Uniqueness (SK_ID_CURR)</text>
-      <text x="15" y="85" fill="#f8fafc" font-size="10">• 0 Sentinel Leakage (365243)</text>
-      <text x="15" y="102" fill="#f8fafc" font-size="10">• Financial Bounds &amp; Feast Spec</text>
-      <text x="15" y="118" fill="#34d399" font-size="10 font-bold">Blocks Serving on Failure</text>
+    <g transform="translate(12, 323)">
+      <rect x="0" y="0" width="196" height="89" rx="6" fill="#450a0a" stroke="#dc2626" stroke-width="1.2" />
+      <text x="10" y="22" fill="#f87171" font-size="12" font-weight="700">Circuit Breaker Gate</text>
+      <text x="10" y="42" fill="#fecaca" font-size="11">• 15 Automated Tests</text>
+      <text x="10" y="60" fill="#fecaca" font-size="11">• PK Uniqueness &amp; Bounds</text>
+      <text x="10" y="78" fill="#fca5a5" font-size="10.5" font-weight="600">Blocks sync on failure</text>
     </g>
   </g>
 
-  <!-- Connect 4 -> 5 -->
-  <line x1="930" y1="480" x2="970" y2="480" stroke="#64748b" stroke-width="2" marker-end="url(#arrow)" />
-
-  <!-- ==================== COLUMN 5: FEATURE STORE ==================== -->
-  <g transform="translate(970, 120)">
-    <rect x="0" y="0" width="180" height="730" rx="12" fill="url(#fsGrad)" stroke="#8b5cf6" stroke-width="1.5" />
-    <text x="20" y="35" fill="#c4b5fd" font-size="12" font-weight="bold" letter-spacing="1">FEATURE STORE</text>
-    <text x="20" y="55" fill="#f8fafc" font-size="15" font-weight="bold">Dual Feast Store</text>
-    <text x="20" y="73" fill="#ddd6fe" font-size="11">Feast 0.44 • Zero Skew</text>
+  <!-- ==================== STAGE 5: SERVING LAYER ==================== -->
+  <g transform="translate(1020, 95)">
+    <rect x="0" y="0" width="220" height="430" rx="10" fill="url(#cardBg)" stroke="#8b5cf6" stroke-width="1" filter="url(#dropShadow)" />
+    <rect x="0" y="0" width="220" height="6" rx="3" fill="url(#accentFeast)" />
+    <text x="16" y="32" fill="#c084fc" font-size="11" font-weight="700" letter-spacing="1">SERVING LAYER</text>
+    <text x="16" y="52" fill="#f8fafc" font-size="15" font-weight="700">Feast Feature Store</text>
+    <text x="16" y="70" fill="#94a3b8" font-size="11">Dual Store • Zero Skew</text>
 
     <!-- Offline Store -->
-    <g transform="translate(15, 95)">
-      <rect x="0" y="0" width="150" height="230" rx="8" fill="#1e293b" stroke="#7c3aed" stroke-width="1.5" />
-      <text x="15" y="28" fill="#c4b5fd" font-size="12" font-weight="bold">Offline Delta Store</text>
-      <text x="15" y="52" fill="#94a3b8" font-size="10 font-mono">FileSource(Delta)</text>
-      <text x="15" y="75" fill="#cbd5e1" font-size="10">• Historical retrieval</text>
-      <text x="15" y="95" fill="#cbd5e1" font-size="10">• Point-in-time joins</text>
-      <text x="15" y="115" fill="#cbd5e1" font-size="10">• Zero data leakage</text>
-      <text x="15" y="135" fill="#cbd5e1" font-size="10">• Out-Of-Time training</text>
-      <text x="15" y="155" fill="#38bdf8" font-size="10">get_historical_features</text>
-      <text x="15" y="180" fill="#94a3b8" font-size="10">Feeds ML models:</text>
-      <text x="15" y="200" fill="#34d399" font-size="10 font-bold">Repo 2 (MLOps Pipeline)</text>
+    <g transform="translate(12, 85)">
+      <rect x="0" y="0" width="196" height="125" rx="6" fill="#1e293b" stroke="#5b21b6" stroke-width="0.8" />
+      <text x="10" y="20" fill="#d8b4fe" font-size="11.5" font-weight="700">Offline Store (Delta)</text>
+      <text x="10" y="38" fill="#cbd5e1" font-size="11">• FileSource (Parquet/Delta)</text>
+      <text x="10" y="56" fill="#cbd5e1" font-size="11">• Point-in-time time travel</text>
+      <text x="10" y="74" fill="#cbd5e1" font-size="11">• Zero data leakage</text>
+      <text x="10" y="92" fill="#cbd5e1" font-size="11">• ML model training dataset</text>
+      <text x="10" y="110" fill="#a78bfa" font-size="10.5" font-weight="600">Feeds MLOps Pipeline</text>
     </g>
-
-    <!-- Sync Arrow -->
-    <path d="M 90 335 L 90 375" stroke="#a78bfa" stroke-width="2" stroke-dasharray="3 3" marker-end="url(#arrowBlue)" />
 
     <!-- Online Store -->
-    <g transform="translate(15, 385)">
-      <rect x="0" y="0" width="150" height="200" rx="8" fill="#0f172a" stroke="#a855f7" stroke-width="2" />
-      <text x="15" y="28" fill="#c4b5fd" font-size="12" font-weight="bold">Online Redis Store</text>
-      <text x="15" y="52" fill="#94a3b8" font-size="10 font-mono">Redis (Port 6379)</text>
-      <text x="15" y="78" fill="#34d399" font-size="11 font-bold">0.83 ms Latency</text>
-      <text x="15" y="100" fill="#cbd5e1" font-size="10">• 5,000 active clients</text>
-      <text x="15" y="120" fill="#cbd5e1" font-size="10">• Hash key per entity</text>
-      <text x="15" y="140" fill="#cbd5e1" font-size="10">• Real-time inference</text>
-      <text x="15" y="160" fill="#38bdf8" font-size="10">get_online_features</text>
-      <text x="15" y="182" fill="#f59e0b" font-size="10">Credit Decision API</text>
+    <g transform="translate(12, 220)">
+      <rect x="0" y="0" width="196" height="105" rx="6" fill="#1e293b" stroke="#5b21b6" stroke-width="0.8" />
+      <text x="10" y="20" fill="#d8b4fe" font-size="11.5" font-weight="700">Online Store (Redis)</text>
+      <text x="10" y="38" fill="#cbd5e1" font-size="11">• Port 6379 in-memory cache</text>
+      <text x="10" y="56" fill="#cbd5e1" font-size="11">• Sub-millisecond latency (&lt;1ms)</text>
+      <text x="10" y="74" fill="#cbd5e1" font-size="11">• Single hash key per entity</text>
+      <text x="10" y="92" fill="#a78bfa" font-size="10.5" font-weight="600">Live Credit Scoring API</text>
     </g>
 
-    <!-- Consumers Box -->
-    <g transform="translate(15, 600)">
-      <rect x="0" y="0" width="150" height="110" rx="8" fill="#1e293b" stroke="#7c3aed" stroke-width="1.5" />
-      <text x="15" y="25" fill="#c4b5fd" font-size="11" font-weight="bold">Downstream Consumers</text>
-      <text x="15" y="48" fill="#94a3b8" font-size="10">• Loan Approval App</text>
-      <text x="15" y="68" fill="#94a3b8" font-size="10">• Real-time Risk Scoring</text>
-      <text x="15" y="88" fill="#94a3b8" font-size="10">• Fraud Detection Service</text>
+    <!-- Downstream Consumers -->
+    <g transform="translate(12, 334)">
+      <rect x="0" y="0" width="196" height="78" rx="6" fill="#0f172a" stroke="#5b21b6" stroke-width="1" />
+      <text x="10" y="20" fill="#c084fc" font-size="11" font-weight="700">Consumers</text>
+      <text x="10" y="38" fill="#94a3b8" font-size="10.5">• Real-time loan decisioning</text>
+      <text x="10" y="54" fill="#94a3b8" font-size="10.5">• Underwriting risk service</text>
+      <text x="10" y="70" fill="#94a3b8" font-size="10.5">• Fraud scoring microservice</text>
     </g>
   </g>
 
+  <!-- ==================== FOOTER / GUARANTEES BAR ==================== -->
+  <g transform="translate(40, 545)">
+    <rect x="0" y="0" width="1200" height="50" rx="8" fill="#161e2e" stroke="#334155" stroke-width="1" />
+    <text x="20" y="30" fill="#94a3b8" font-size="11.5" font-weight="600">ENGINEERING GUARANTEES:</text>
+    
+    <g transform="translate(210, 14)">
+      <rect x="0" y="0" width="160" height="24" rx="4" fill="#1e293b" stroke="#475569" stroke-width="0.8" />
+      <text x="10" y="16" fill="#38bdf8" font-size="11" font-weight="600">✓ 100% Idempotent Runs</text>
+    </g>
+
+    <g transform="translate(385, 14)">
+      <rect x="0" y="0" width="170" height="24" rx="4" fill="#1e293b" stroke="#475569" stroke-width="0.8" />
+      <text x="10" y="16" fill="#10b981" font-size="11" font-weight="600">✓ ACID Delta Transactions</text>
+    </g>
+
+    <g transform="translate(570, 14)">
+      <rect x="0" y="0" width="180" height="24" rx="4" fill="#1e293b" stroke="#475569" stroke-width="0.8" />
+      <text x="10" y="16" fill="#a78bfa" font-size="11" font-weight="600">✓ Zero Training-Serve Skew</text>
+    </g>
+
+    <g transform="translate(765, 14)">
+      <rect x="0" y="0" width="180" height="24" rx="4" fill="#1e293b" stroke="#475569" stroke-width="0.8" />
+      <text x="10" y="16" fill="#f59e0b" font-size="11" font-weight="600">✓ Chaos Recovery Checked</text>
+    </g>
+
+    <g transform="translate(960, 14)">
+      <rect x="0" y="0" width="220" height="24" rx="4" fill="#1e293b" stroke="#475569" stroke-width="0.8" />
+      <text x="10" y="16" fill="#f87171" font-size="11" font-weight="600">✓ Circuit Breaker Quarantine</text>
+    </g>
+  </g>
 </svg>
