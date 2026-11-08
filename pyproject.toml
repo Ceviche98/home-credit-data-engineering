@@ -1,0 +1,38 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "home-credit-de"
+version = "0.1.0"
+description = "Lakehouse and Feature Store for Home Credit Risk"
+readme = "DATA_ENGINEERING_STEP_BY_STEP_GUIDE.md"
+requires-python = ">=3.10"
+
+dependencies = [
+    "pyspark>=3.5.0",              # Distributed data engine for Bronze & Silver layers
+    "delta-spark>=3.2.0",          # Delta Lake ACID transaction layer
+    "azure-storage-blob>=12.19.0", # Azure SDK to communicate with Azurite / ADLS Gen2
+    "databricks-sdk>=0.30.0",      # Databricks SDK to trigger jobs and volumes
+    "pydantic>=2.7.0",             # Schema validation and data contracts
+    "dbt-databricks>=1.8.0",       # dbt adapter to compile and run SQL on Databricks
+    "feast[redis]>=0.40.0",        # Feature store with Redis online connector
+    "pyyaml>=6.0.1",               # For parsing our pipeline config files
+    "openpyxl>=3.1.2",             # For reading spreadsheet metadata if needed
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0.0",               # Automated testing framework
+    "pytest-cov>=5.0.0",           # Test coverage measurement
+    "ruff>=0.5.0",                 # Ultra-fast linter and formatter
+]
+
+[tool.ruff]
+line-length = 100
+
+[tool.ruff.lint]
+ignore = ["BLE001"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

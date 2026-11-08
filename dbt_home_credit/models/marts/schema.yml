@@ -1,0 +1,28 @@
+version: 2
+
+models:
+  - name: gold_customer_features
+    description: "Master Credit Risk Feature Table for downstream MLOps training (Repo 2) and Feast Feature Store."
+    columns:
+      - name: SK_ID_CURR
+        description: "Primary Key: Loan application identifier."
+        tests:
+          - unique
+          - not_null
+
+      - name: TARGET
+        description: "Target binary label: 1 = client had payment difficulties (default), 0 = other."
+        tests:
+          - accepted_values:
+              arguments:
+                values: [0, 1]
+
+      - name: debt_to_income_ratio
+        description: "Financial leverage ratio (AMT_CREDIT / AMT_INCOME_TOTAL)."
+        tests:
+          - not_null
+
+      - name: ext_source_mean
+        description: "Mean of external normalized scores (EXT_SOURCE_1, 2, 3)."
+        tests:
+          - not_null

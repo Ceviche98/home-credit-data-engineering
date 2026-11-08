@@ -1,0 +1,26 @@
+services:
+  azurite:
+    image: mcr.microsoft.com/azure-storage/azurite:latest
+    container_name: hc_azurite
+    restart: unless-stopped
+    ports:
+      - "10000:10000" # Azure Blob Service
+      - "10001:10001" # Azure Queue Service
+      - "10002:10002" # Azure Table Service
+    volumes:
+      - azurite_data:/data
+    command: "azurite --blobHost 0.0.0.0 --blobPort 10000 --location /data --debug /data/debug.log --skipApiVersionCheck"
+
+  redis:
+    image: redis:7-alpine
+    container_name: hc_redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379" # Standard Redis port
+    volumes:
+      - redis_data:/data
+    command: redis-server --appendonly yes
+
+volumes:
+  azurite_data:
+  redis_data:

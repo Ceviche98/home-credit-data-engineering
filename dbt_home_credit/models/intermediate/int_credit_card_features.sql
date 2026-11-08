@@ -1,0 +1,36 @@
+{{ config(materialized='view') }}
+
+SELECT
+    SK_ID_CURR,
+    COUNT(SK_ID_PREV) AS cc_records_count,
+    COUNT(DISTINCT SK_ID_PREV) AS cc_unique_cards_count,
+    COUNT(MONTHS_BALANCE) AS cc_months_balance_size,
+    MIN(MONTHS_BALANCE) AS cc_months_balance_min,
+    MAX(MONTHS_BALANCE) AS cc_months_balance_max,
+    AVG(AMT_BALANCE) AS cc_amt_balance_avg,
+    MAX(AMT_BALANCE) AS cc_amt_balance_max,
+    AVG(AMT_CREDIT_LIMIT_ACTUAL) AS cc_amt_credit_limit_avg,
+    MAX(AMT_CREDIT_LIMIT_ACTUAL) AS cc_amt_credit_limit_max,
+    AVG(AMT_BALANCE / NULLIF(AMT_CREDIT_LIMIT_ACTUAL, 0)) AS cc_utilization_ratio_avg,
+    SUM(AMT_DRAWINGS_ATM_CURRENT) AS cc_drawings_atm_sum,
+    AVG(AMT_DRAWINGS_ATM_CURRENT) AS cc_drawings_atm_avg,
+    SUM(AMT_DRAWINGS_CURRENT) AS cc_drawings_current_sum,
+    AVG(AMT_DRAWINGS_CURRENT) AS cc_drawings_current_avg,
+    SUM(AMT_DRAWINGS_POS_CURRENT) AS cc_drawings_pos_sum,
+    AVG(AMT_DRAWINGS_POS_CURRENT) AS cc_drawings_pos_avg,
+    SUM(CNT_DRAWINGS_ATM_CURRENT) AS cc_cnt_drawings_atm_sum,
+    AVG(CNT_DRAWINGS_ATM_CURRENT) AS cc_cnt_drawings_atm_avg,
+    SUM(CNT_DRAWINGS_CURRENT) AS cc_cnt_drawings_current_sum,
+    AVG(CNT_DRAWINGS_CURRENT) AS cc_cnt_drawings_current_avg,
+    AVG(AMT_PAYMENT_CURRENT / NULLIF(AMT_INST_MIN_REGULARITY, 0)) AS cc_payment_to_min_reg_ratio_avg,
+    AVG(AMT_TOTAL_RECEIVABLE) AS cc_amt_total_receivable_avg,
+    MAX(AMT_TOTAL_RECEIVABLE) AS cc_amt_total_receivable_max,
+    AVG(AMT_RECEIVABLE_PRINCIPAL) AS cc_amt_receivable_principal_avg,
+    MAX(AMT_RECEIVABLE_PRINCIPAL) AS cc_amt_receivable_principal_max,
+    MAX(SK_DPD) AS cc_sk_dpd_max,
+    AVG(SK_DPD) AS cc_sk_dpd_avg,
+    MAX(SK_DPD_DEF) AS cc_sk_dpd_def_max,
+    AVG(SK_DPD_DEF) AS cc_sk_dpd_def_avg,
+    SUM(CASE WHEN SK_DPD > 0 THEN 1 ELSE 0 END) AS cc_dpd_nonzero_count
+FROM {{ ref('stg_credit_card') }}
+GROUP BY SK_ID_CURR

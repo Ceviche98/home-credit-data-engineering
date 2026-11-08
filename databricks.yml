@@ -1,0 +1,92 @@
+# Databricks Asset Bundle (DAB) Configuration
+# Defines the enterprise multi-task Databricks Workflow Job as code.
+bundle:
+  name: home_credit_data_engineering
+
+targets:
+  dev:
+    mode: development
+    default: true
+    workspace:
+      host: https://adb-dev.azuredatabricks.net
+
+  prod:
+    mode: production
+    workspace:
+      host: https://adb-prod.azuredatabricks.net
+
+resources:
+  jobs:
+    home_credit_lakehouse_pipeline:
+      name: "[Prod] Home Credit Medallion Lakehouse & Feature Store Pipeline"
+      description: "Automated end-to-end batch ingestion, Silver refinery, dbt Gold modeling, quality circuit breakers, and Feast synchronization."
+      
+      schedule:
+        quartz_cron_expression: "0 0 2 1 * ?" # Runs monthly on the 1st at 02:00 UTC
+        timezone_id: "UTC"
+        pause_status: "PAUSED"
+
+      parameters:
+        - name: batch_id
+          default: "batch_1_2025_10"
+
+      job_clusters:
+        - job_cluster_key: lakehouse_cluster
+          new_cluster:
+            spark_version: "14.3.x-scala2.12"
+            node_type_id: "Standard_D4ds_v5"
+            num_workers: 2
+            spark_conf:
+              "spark.databricks.delta.preview.enabled": "true"
+              "spark.sql.streaming.schemaInference": "true"
+
+      tasks:
+        # Task 1: Ingest Landing to Bronze Delta Lake
+        - task_key: ingest_landing_to_bronze
+          job_cluster_key: lakehouse_cluster
+          spark_python_task:
+            python_file: "src/home_credit_de/ingestion/bronze_loader.py"
+            parameters: ["--batch", "{{job.parameters.batch_id}}"]
+          timeout_seconds: 1800
+          max_retries: 2
+          min_retry_interval_millis: 60000
+
+        # Task 2: Refine Bronze to Silver with Delta MERGE INTO
+        - task_key: refine_bronze_to_silver
+          depends_on:
+            - task_key: ingest_landing_to_bronze
+          job_cluster_key: lakehouse_cluster
+          spark_python_task:
+            python_file: "src/home_credit_de/transformation/silver_processor.py"
+          timeout_seconds: 3600
+          max_retries: 1
+
+        # Task 3: dbt Gold Feature Modeling on Databricks SQL Warehouse
+        - task_key: dbt_silver_to_gold
+          depends_on:
+            - task_key: refine_bronze_to_silver
+          dbt_task:
+            project_directory: "dbt_home_credit"
+            commands:
+              - "dbt deps"
+              - "dbt run --models marts"
+            warehouse_id: "{{var.sql_warehouse_id}}"
+          timeout_seconds: 1800
+
+        # Task 4: Automated Data Quality Circuit Breaker
+        - task_key: data_quality_circuit_breaker
+          depends_on:
+            - task_key: dbt_silver_to_gold
+          job_cluster_key: lakehouse_cluster
+          spark_python_task:
+            python_file: "src/home_credit_de/quality/circuit_breaker.py"
+          timeout_seconds: 900
+
+        # Task 5: Sync Gold Features into Online Feature Store (Redis)
+        - task_key: sync_feature_store
+          depends_on:
+            - task_key: data_quality_circuit_breaker
+          job_cluster_key: lakehouse_cluster
+          spark_python_task:
+            python_file: "src/home_credit_de/feature_store/feast_manager.py"
+          timeout_seconds: 1200

@@ -1,0 +1,11 @@
+home_credit_databricks:
+  target: dev
+  outputs:
+    dev:
+      type: databricks
+      schema: gold
+      catalog: "{{ env_var('DATABRICKS_CATALOG', 'home_credit') }}"
+      host: "{{ env_var('DATABRICKS_HOST', 'adb-local-mock.azuredatabricks.net') }}"
+      http_path: "{{ env_var('DATABRICKS_HTTP_PATH', '/sql/1.0/warehouses/mock') }}"
+      token: "{{ env_var('DATABRICKS_TOKEN', 'mock_token') }}"
+      threads: 4

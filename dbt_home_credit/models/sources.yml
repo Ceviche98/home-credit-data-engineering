@@ -1,0 +1,20 @@
+version: 2
+
+sources:
+  - name: silver
+    description: "Conformed Silver Delta Lakehouse tables (anomaly-fixed, deduplicated, and Z-Ordered)"
+    tables:
+      - name: application_train
+        description: "Primary client loan applications (with TARGET default label)"
+      - name: bureau
+        description: "External credit bureau historical loan records"
+      - name: bureau_balance
+        description: "Monthly status history of external credits, resolved with SK_ID_CURR"
+      - name: previous_application
+        description: "Previous internal loan applications and approval decisions"
+      - name: installments_payments
+        description: "Historical repayment installments with days late and underpayment metrics"
+      - name: pos_cash_balance
+        description: "Monthly point-of-sale and cash loan snapshots"
+      - name: credit_card_balance
+        description: "Monthly credit card revolving balances and credit limits"
